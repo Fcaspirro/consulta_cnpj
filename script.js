@@ -148,6 +148,10 @@ $(function() {
   $('#submit').on('click', function() {
     var data = collectData();
     console.log(JSON.stringify(data));
+    $('#message').html('<div class="alert alert-success">Dados salvos em formato JSON. Para visualizar, abra o console do seu navegador pressionando F12.</div>');
+    setTimeout(function() {
+      $('#message').html('');
+    }, 10000); // 10 segundos
   });
 
   function collectData() {
