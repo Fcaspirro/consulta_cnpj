@@ -1,40 +1,41 @@
-$(function() {
+document.addEventListener("DOMContentLoaded", function() {
   // Ocultar botão de submit inicialmente
-  $('#submit').hide();
+  document.getElementById('submit').style.display = 'none';
 
   // Ação para o botão de consulta
-  $('#consultar-btn').click(function() {
-    let cnpj = $('#cnpj-input').val().replace(/[^\d]+/g, ''); // Remove caracteres não numéricos
+  document.getElementById('consultar-btn').addEventListener('click', function() {
+    let cnpj = document.getElementById('cnpj-input').value.replace(/[^\d]+/g, ''); // Remove caracteres não numéricos
     if (!isValidCNPJ(cnpj)) {
-      $('#result').html('<div class="alert alert-danger">CNPJ inválido. Por favor, digite um CNPJ válido no formato: 12.345.678/0001-00.</div>');
+      document.getElementById('result').innerHTML = '<div class="alert alert-danger">CNPJ inválido. Por favor, digite um CNPJ válido no formato: 12.345.678/0001-00.</div>';
       return;
     }
 
-    $('#loader').show();
+    document.getElementById('loader').style.display = 'block';
 
-    $.ajax({
-      url: `https://brasilapi.com.br/api/cnpj/v1/${cnpj}`,
-      method: 'GET',
-      success: function(data) {
+    fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`)
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
+      .then(data => {
         displayData(data);
-        $('#submit').show();
-      },
-      error: function(jqXHR) {
-        if (jqXHR.status === 400) { 
-          $('#result').html('<div class="alert alert-danger">CNPJ não encontrado. Verifique se o CNPJ está correto e tente novamente!</div>');
-        } else if (jqXHR.status === 404) {
-          $('#result').html('<div class="alert alert-danger">O texto caiu no error 404!</div>');
-        }else if (jqXHR.status === 500) {
-          $('#result').html('<div class="alert alert-danger">Serviço indisponível no momento, tente novamente mais tarde!</div>');
+        document.getElementById('submit').style.display = 'block';
+      })
+      .catch(error => {
+        if (error.status === 400 || error.status === 404) { 
+          document.getElementById('result').innerHTML = '<div class="alert alert-danger">CNPJ não encontrado. Verifique se o CNPJ está correto e tente novamente!</div>';
+        } else if (error.status === 500) {
+          document.getElementById('result').innerHTML = '<div class="alert alert-danger">Serviço indisponível no momento, tente novamente mais tarde!</div>';
         } else {
-          $('#result').html('<div class="alert alert-danger">Ocorreu um erro ao buscar o CNPJ. Por favor, tente novamente mais tarde!</div>');
+          document.getElementById('result').innerHTML = '<div class="alert alert-danger">Ocorreu um erro ao buscar o CNPJ. Por favor, tente novamente mais tarde!</div>';
         } 
-        $('#submit').hide();
-      },
-      complete: function() {
-        $('#loader').hide();
-      }
-    });
+        document.getElementById('submit').style.display = 'none';
+      })
+      .finally(() => {
+        document.getElementById('loader').style.display = 'none';
+      });
   });
 
   // Função de validação do CNPJ
@@ -44,21 +45,21 @@ $(function() {
   }
 
   // Formatação do campo CNPJ
-  $('#cnpj-input').on('input', function() {
-    let cnpj = $(this).val().replace(/[^\d]+/g, '');
+  document.getElementById('cnpj-input').addEventListener('input', function() {
+    let cnpj = this.value.replace(/[^\d]+/g, '');
     if (cnpj.length > 14) {
       cnpj = cnpj.substring(0, 14); // Limita o CNPJ a 14 dígitos
     }
     if (cnpj.length <= 2) {
-      $(this).val(cnpj);
+      this.value = cnpj;
     } else if (cnpj.length <= 5) {
-      $(this).val(cnpj.replace(/(\d{2})(\d{0,3})/, '$1.$2'));
+      this.value = cnpj.replace(/(\d{2})(\d{0,3})/, '$1.$2');
     } else if (cnpj.length <= 8) {
-      $(this).val(cnpj.replace(/(\d{2})(\d{3})(\d{0,3})/, '$1.$2.$3'));
+      this.value = cnpj.replace(/(\d{2})(\d{3})(\d{0,3})/, '$1.$2.$3');
     } else if (cnpj.length <= 12) {
-      $(this).val(cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{0,4})/, '$1.$2.$3/$4'));
+      this.value = cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{0,4})/, '$1.$2.$3/$4');
     } else {
-      $(this).val(cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/, '$1.$2.$3/$4-$5'));
+      this.value = cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/, '$1.$2.$3/$4-$5');
     }
   });
 
@@ -155,40 +156,40 @@ $(function() {
       `;
     }
 
-    $('#result').html(empresaHtml + sociosHtml);
+    document.getElementById('result').innerHTML = empresaHtml + sociosHtml;
   }
 
   // Ação para coleta dos dados em json e mostrar no console.log (posteriormente para utilização em banco de dados)
-  $('#submit').on('click', function() {
+  document.getElementById('submit').addEventListener('click', function() {
     var data = collectData();
     console.log(JSON.stringify(data));
-    $('#message').html('<div class="alert alert-success">Dados salvos em formato JSON. Para visualizar, abra o console do seu navegador pressionando F12.</div>');
+    document.getElementById('message').innerHTML = '<div class="alert alert-success">Dados salvos em formato JSON. Para visualizar, abra o console do seu navegador pressionando F12.</div>';
     setTimeout(function() {
-      $('#message').html('');
+      document.getElementById('message').innerHTML = '';
     }, 6000); // 6 segundos
   });
 
   function collectData() {
     var data = {
-      cnpj: $('#cnpj-input').val().replace(/[^\d]+/g, ''),
-      nome_fantasia: $('#nomeFantasia').val(),
-      razao_social: $('#razaoSocial').val(),
-      data_abertura: $('#dataAbertura').val(),
-      situacao_cadastral: $('#situacaoCadastral').val(),
-      atividade_principal: $('#atividadePrincipal').val(),
-      endereco_completo: $('#enderecoCompleto').val(),
-      telefone_primario: $('#telefonePrimario').val(),
-      telefone_secundario: $('#telefoneSecundario').val(),
-      email: $('#email').val(),
+      cnpj: document.getElementById('cnpj-input').value.replace(/[^\d]+/g, ''),
+      nome_fantasia: document.getElementById('nomeFantasia').value,
+      razao_social: document.getElementById('razaoSocial').value,
+      data_abertura: document.getElementById('dataAbertura').value,
+      situacao_cadastral: document.getElementById('situacaoCadastral').value,
+      atividade_principal: document.getElementById('atividadePrincipal').value,
+      endereco_completo: document.getElementById('enderecoCompleto').value,
+      telefone_primario: document.getElementById('telefonePrimario').value,
+      telefone_secundario: document.getElementById('telefoneSecundario').value,
+      email: document.getElementById('email').value,
       qsa: []
     };
 
-    $('.wrapperPartners .card').each(function() {
+    document.querySelectorAll('.wrapperPartners .card').forEach(function(card) {
       var socio = {
-        nome_socio: $(this).find('#nomeSocio').val(),
-        qualificacao: $(this).find('#qualificacao').val(),
-        percentual_capital_social: $(this).find('#percentualCapitalSocial').val(),
-        entrada_sociedade: $(this).find('#entradaSociedade').val()
+        nome_socio: card.querySelector('#nomeSocio').value,
+        qualificacao: card.querySelector('#qualificacao').value,
+        percentual_capital_social: card.querySelector('#percentualCapitalSocial').value,
+        entrada_sociedade: card.querySelector('#entradaSociedade').value
       };
       data.qsa.push(socio);
     });
