@@ -18,6 +18,7 @@ Projeto desenvolvido para consulta de CNPJ utilizando a <a href="https://brasila
 </h2> 
   
 - :dizzy: [Interface](#funcionalidades)
+- :computer: [Tecnologias](#tecnologias-e-ferramenta-utilizadas)
 - :mag_right: [Como Usar](#como-rodar-o-projeto)
 - :file_folder: [Estrutura do Projeto](#estrutura-do-projeto)
   
@@ -39,7 +40,31 @@ Projeto desenvolvido para consulta de CNPJ utilizando a <a href="https://brasila
 
 ---
 
+## Tecnologias e ferramenta utilizadas
+
+#### Tecnologias:
+
+- **HTML**
+- **CSS**
+  
+- [Javascript](https://javascript.com)
+ 
+</p>
+
+#### IDE:
+  
+- [Visual Studio Code](https://code.visualstudio.com/)
+
+---
+
 ## Como Rodar o Projeto
+
+#### Confira o link:
+```bash
+  https://fcaspirro.github.io/consulta_cnpj/
+```
+
+## ou rode localmente em sua máquina seguindo os passos abaixo
 
 #### Pré-requisitos:
 - XAMPP ou qualquer servidor Apache + PHP.
