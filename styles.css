@@ -9,14 +9,13 @@ html {
 }
 
 body {
-  background-image: radial-gradient(circle, #ffcb00, #d3c500, #a9bc08, #7fb21f, #56a62f, #42a035, #2b9a3b, #009440, #009440, #009440, #009440, #009440);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-color: #e3e3e3;
+  opacity: 1;
+  background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #e3e3e3 10px ), repeating-linear-gradient( #d5d5d555, #d5d5d5 );
   min-height: 100vh;
   font-family: 'Poppins', 'sans-serif';
   font-size: 1.4rem;
-  color: white;
+  color: black;
 }
 
 /***** MAIN *****/
@@ -37,7 +36,7 @@ h2::before {
   position: absolute;
   width: 100%;
   height: 1px;
-  background: #ced4da;
+  background: rgba(0, 0, 0, 0.2);
   top: -2.5rem;
   left: 0;
 }
@@ -49,7 +48,7 @@ h2::before {
 
 .std label {
   font-weight: 500;
-  color: white;
+  color: black;
 }
 
 .std input {
@@ -62,7 +61,6 @@ h2::before {
 
 .std button {
   font-size: 1.4rem;
-  border: 1px solid white;
 }
 
 #result {
@@ -80,7 +78,8 @@ h2::before {
 #result .wrapperCompany input, 
 #result .wrapperPartners input {
   background: none;
-  color: white;
+  color: black;
+  border: 0.05rem solid rgba(0,0,0, 0.2);
 }
 
 #result .wrapperPartners .card {
