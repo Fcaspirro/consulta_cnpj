@@ -7,9 +7,10 @@ $(function() {
     let cnpj = $('#cnpj-input').val().replace(/[^\d]+/g, ''); // Remove caracteres não numéricos
     if (!isValidCNPJ(cnpj)) {
       $('#result').html('<div class="alert alert-danger">CNPJ inválido. Por favor, digite um CNPJ válido no formato: 12.345.678/0001-00.</div>');
-      $('#submit').hide();
       return;
     }
+
+    $('#loader').show();
 
     $.ajax({
       url: `https://brasilapi.com.br/api/cnpj/v1/${cnpj}`,
@@ -19,7 +20,7 @@ $(function() {
         $('#submit').show();
       },
       error: function(jqXHR) {
-        if (jqXHR.status === 404) {
+        if (jqXHR.status === 404) { 
           $('#result').html('<div class="alert alert-danger">CNPJ não encontrado. Verifique se o CNPJ está correto e tente novamente!</div>');
         } else if (jqXHR.status === 500) {
           $('#result').html('<div class="alert alert-danger">Serviço indisponível no momento, tente novamente mais tarde!</div>');
@@ -27,6 +28,9 @@ $(function() {
           $('#result').html('<div class="alert alert-danger">Ocorreu um erro ao buscar o CNPJ. Por favor, tente novamente mais tarde!</div>');
         } 
         $('#submit').hide();
+      },
+      complete: function() {
+        $('#loader').hide();
       }
     });
   });
@@ -159,7 +163,7 @@ $(function() {
     $('#message').html('<div class="alert alert-success">Dados salvos em formato JSON. Para visualizar, abra o console do seu navegador pressionando F12.</div>');
     setTimeout(function() {
       $('#message').html('');
-    }, 10000); // 10 segundos
+    }, 6000); // 6 segundos
   });
 
   function collectData() {
