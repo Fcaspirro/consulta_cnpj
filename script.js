@@ -20,9 +20,11 @@ $(function() {
         $('#submit').show();
       },
       error: function(jqXHR) {
-        if (jqXHR.status === 404) { 
+        if (jqXHR.status === 400) { 
           $('#result').html('<div class="alert alert-danger">CNPJ não encontrado. Verifique se o CNPJ está correto e tente novamente!</div>');
-        } else if (jqXHR.status === 500) {
+        } else if (jqXHR.status === 404) {
+          $('#result').html('<div class="alert alert-danger">O texto caiu no error 404!</div>');
+        }else if (jqXHR.status === 500) {
           $('#result').html('<div class="alert alert-danger">Serviço indisponível no momento, tente novamente mais tarde!</div>');
         } else {
           $('#result').html('<div class="alert alert-danger">Ocorreu um erro ao buscar o CNPJ. Por favor, tente novamente mais tarde!</div>');
