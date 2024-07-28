@@ -7,6 +7,7 @@ $(function() {
     let cnpj = $('#cnpj-input').val().replace(/[^\d]+/g, ''); // Remove caracteres não numéricos
     if (!isValidCNPJ(cnpj)) {
       $('#result').html('<div class="alert alert-danger">CNPJ inválido. Por favor, digite um CNPJ válido no formato: 12.345.678/0001-00.</div>');
+      $('#submit').hide();
       return;
     }
 
@@ -24,7 +25,8 @@ $(function() {
           $('#result').html('<div class="alert alert-danger">Serviço indisponível no momento, tente novamente mais tarde!</div>');
         } else {
           $('#result').html('<div class="alert alert-danger">Ocorreu um erro ao buscar o CNPJ. Por favor, tente novamente mais tarde!</div>');
-        }
+        } 
+        $('#submit').hide();
       }
     });
   });
