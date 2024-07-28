@@ -17,8 +17,14 @@ $(function() {
         displayData(data);
         $('#submit').show();
       },
-      error: function(error) {
-        $('#result').html('<div class="alert alert-danger">Não foi possível encontrar o CNPJ informado. Verifique se o CNPJ está correto e tente novamente.</div>');
+      error: function(jqXHR) {
+        if (jqXHR.status === 404) {
+          $('#result').html('<div class="alert alert-danger">CNPJ não encontrado. Verifique se o CNPJ está correto e tente novamente!</div>');
+        } else if (jqXHR.status === 500) {
+          $('#result').html('<div class="alert alert-danger">Serviço indisponível no momento, tente novamente mais tarde!</div>');
+        } else {
+          $('#result').html('<div class="alert alert-danger">Ocorreu um erro ao buscar o CNPJ. Por favor, tente novamente mais tarde!</div>');
+        }
       }
     });
   });
