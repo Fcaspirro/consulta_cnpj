@@ -94,7 +94,7 @@ Projeto desenvolvido para consulta de CNPJ utilizando a <a href="https://brasila
   consulta_cnpj/
     ├── index.html
     ├── script.js
-    ├── style.css
+    ├── styles.css
     └── assets/
          ├── img/
          │    ├── brand.jpg
